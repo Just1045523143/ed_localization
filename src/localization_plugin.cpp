@@ -25,7 +25,7 @@
 
 // ----------------------------------------------------------------------------------------------------
 
-LocalizationPlugin::LocalizationPlugin() : have_previous_pose_(false), laser_offset_initialized_(false),
+LocalizationPlugin::LocalizationPlugin() : visualize_(false), have_previous_pose_(false), laser_offset_initialized_(false),
     last_map_size_revision_(0), tf_listener_(nullptr), tf_broadcaster_(nullptr)
 {
 }
@@ -65,6 +65,9 @@ void LocalizationPlugin::configure(tue::Configuration config)
 
     if (!tf_broadcaster_)
         tf_broadcaster_.reset(new tf::TransformBroadcaster);
+
+    visualize_ = false;
+    config.value("visualize", visualize_, tue::config::OPTIONAL);
 
     std::string laser_topic;
 
@@ -367,8 +370,7 @@ TransformStatus LocalizationPlugin::update(const sensor_msgs::LaserScanConstPtr&
     // -     Visualization
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    bool visualize = false;
-    if (visualize)
+    if (visualize_)
     {
         int grid_size = 800;
         double grid_resolution = 0.025;
@@ -427,6 +429,10 @@ TransformStatus LocalizationPlugin::update(const sensor_msgs::LaserScanConstPtr&
 
         cv::imshow("localization", rgb_image);
         cv::waitKey(1);
+    }
+    else
+    {
+        cv::destroyAllWindows();
     }
 
     return OK;

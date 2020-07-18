@@ -59,6 +59,8 @@ private:
 
     std::string robot_name_;
 
+    bool visualize_;
+
 
     // PARTICLE FILTER
 
