@@ -117,7 +117,7 @@ void LocalizationPlugin::configure(tue::Configuration config)
     }
 
     // Initial pose
-    geo::Vec2 p; p.x = 0; p.y = 0;
+    geo::Vec2 p(0, 0);
     double yaw = 0;
 
     // Getting last pose from parameter server
